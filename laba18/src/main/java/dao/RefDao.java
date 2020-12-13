@@ -26,11 +26,20 @@ public class RefDao {
     }
 
     public List<Reference> getReferences(String filter) throws  SQLException{
+        String[] searchWords;
+        String sql = "select * from `references` where";
         if (filter == null)
-            filter = "";
-        PreparedStatement preparedStatement = connection.prepareStatement("select * from `references` where description like ?");
-        preparedStatement.setString(1,"%"+filter+"%");
-        ResultSet resultSet = preparedStatement.executeQuery();
+            sql += " description like '%%'";
+        else {
+           searchWords = filter.split(" ");
+           for (int i = 0; i<searchWords.length;i++){
+               if (i!= 0)
+                   sql+=" or ";
+               sql += " (description like '%"+searchWords[i]+"%') ";
+           }
+        }
+        Statement preparedStatement = connection.createStatement();
+        ResultSet resultSet = preparedStatement.executeQuery(sql);
         List<Reference> references = new ArrayList<Reference>();
         while (resultSet.next()){
             int id = resultSet.getInt(1);
