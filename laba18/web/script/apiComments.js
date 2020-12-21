@@ -2,6 +2,7 @@ function getCommentForReference(id) {
     fetch('/laba18/Comments?refId='+id, {
         method: 'GET'
     }).then(res => res.json()).then(res => {
+        console.log(res);
         let data = `<table>
                     <tr><td>
                         <h1>--UWSR COMMENTS/${id}--</h1>
@@ -13,7 +14,7 @@ function getCommentForReference(id) {
         if (res) {
             res.forEach(element =>{
                 let comments = `<table><tr><td>[${element.stamp}]`
-                if(role == 'admin' || element.sessionId == sessionId)
+                if(role == 'admin' || element.sessionId == sessionId && element.user == role)
                     comments += `<input type="button" value="delete" onclick="deleteComment(${element.id},${element.refId})">
                                  <input type="button" value="update" onclick="updateComment(${element.id},${element.refId})"><br>
                                  <textarea id="txt${element.id}">${element.comment}</textarea>`
@@ -36,6 +37,7 @@ function addComment(id) {
         },
         body: JSON.stringify({
             comment: document.getElementById('comment').value,
+            user: role,
             refId: id,
             sessionId : sessionId
         })

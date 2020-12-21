@@ -11,6 +11,7 @@ public class Comment {
     int id;
     int refId;
     String sessionId;
+    String user;
     Date stamp;
     String comment;
 }

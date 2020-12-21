@@ -32,20 +32,22 @@ public class CommentDao {
             int id = resultSet.getInt(1);
             refId = resultSet.getInt(2);
             String sessionId = resultSet.getString(3);
-            Date stamp = resultSet.getDate(4);
-            String comment = resultSet.getString(5);
-            comments.add(new Comment(id,refId,sessionId,stamp,comment));
+            String user = resultSet.getString(4);
+            Date stamp = resultSet.getDate(5);
+            String comment = resultSet.getString(6);
+            comments.add(new Comment(id,refId,sessionId,user,stamp,comment));
         }
         return  comments;
     }
 
     public void addComment(Comment comment) throws SQLException {
-        CallableStatement callableStatement = connection.prepareCall("{call AddComment(?,?,?,?,?)}");
+        CallableStatement callableStatement = connection.prepareCall("{call AddComment(?,?,?,?,?,?)}");
         callableStatement.setInt(1,comment.getId());
         callableStatement.setInt(2, comment.getRefId());
         callableStatement.setString(3,comment.getSessionId());
-        callableStatement.setDate(4,comment.getStamp());
-        callableStatement.setString(5,comment.getComment());
+        callableStatement.setString(4,comment.getUser());
+        callableStatement.setDate(5,comment.getStamp());
+        callableStatement.setString(6,comment.getComment());
         callableStatement.execute();
     }
 
